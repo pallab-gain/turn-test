@@ -7,7 +7,7 @@ import {
   Switch
 } from 'react-router-dom';
 
-import TurnTest from './components/turn-test/turn.test';
+import TestView from './components/test.view/test.table';
 
 class App extends React.Component {
     render(): JSX.Element {
@@ -15,7 +15,7 @@ class App extends React.Component {
         <Router>
           <div>
             <Switch>
-              <Route exact path="/" component={TurnTest} />
+              <Route exact path="/" component={TestView} />
             </Switch>
           </div>
         </Router>
