@@ -62,9 +62,9 @@ class TurnTester{
         });
     }
 
-    private async testLoopbackConnection(): Promise<void> {
-        this.peer1 = new SimpleRTC('1', this.onIceCandidate, this.onIceConnectionStateChange);
-        this.peer2 = new SimpleRTC('2', this.onIceCandidate, this.onIceConnectionStateChange);
+    private async testLoopbackConnection(rtcIceServer: RTCIceServer[]): Promise<void> {
+        this.peer1 = new SimpleRTC('1', rtcIceServer, this.onIceCandidate, this.onIceConnectionStateChange);
+        this.peer2 = new SimpleRTC('2', rtcIceServer, this.onIceCandidate, this.onIceConnectionStateChange);
 
         const offerSDP = await this.peer1.doOffer();
         await this.peer2.setRemoteDescription(offerSDP);
@@ -79,7 +79,7 @@ class TurnTester{
         this.peer2 = undefined;
     }
 
-    public startTest(): void{
+    public startTest(turnURL: string, turnUserName: string, turnPassword: string): void{
         this.getFeedback().then( _ => {
             this.resultCallback('', 'success');
             this.dispose().catch();
@@ -87,9 +87,15 @@ class TurnTester{
             this.resultCallback('failed', '');
             this.dispose().catch();
         });
+        const rtcIceServer: RTCIceServer[] = [{
+            credentialType: 'password',
+            credential: turnUserName ,
+            urls: [turnURL],
+            username: turnUserName,
+        }] as RTCIceServer[];
         this.dispose().then( async _=>{
             try{
-                await this.testLoopbackConnection();
+                await this.testLoopbackConnection(rtcIceServer);
             } catch(err){
                 document.dispatchEvent(new Event('onTestFailed'));
             }

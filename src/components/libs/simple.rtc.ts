@@ -9,10 +9,10 @@ class SimpleRTC {
     } as RTCOfferOptions;
     public recvChannel: RTCDataChannel;
     public sendChannel: RTCDataChannel;
-    private isRunning: boolean;
-    constructor(id: string, onIceCandidate: (e: RTCPeerConnectionIceEvent, id: string) => void, onIceConnectionStateChange: (e: object, id: string) => void ){
+    constructor(id: string, rtcIceServer: RTCIceServer[], onIceCandidate: (e: RTCPeerConnectionIceEvent, id: string) => void, onIceConnectionStateChange: (e: object, id: string) => void ){
         const iceConfig: RTCConfiguration = {
-            iceTransportPolicy: "relay"
+            iceTransportPolicy: "relay",
+            iceServers: rtcIceServer,
         };
         this.id = id;
         this.pc = new RTCPeerConnection(iceConfig);
