@@ -88,10 +88,11 @@ class TurnTester{
             this.dispose().catch();
         });
         const rtcIceServer: RTCIceServer[] = [{
-            credentialType: 'password',
-            credential: turnUserName ,
-            urls: [turnURL],
-            username: turnUserName,
+            urls: turnURL,
+            credential: turnPassword,
+            username: turnUserName
+        },{
+            urls: "stun:stun.l.google.com:19302" 
         }] as RTCIceServer[];
         this.dispose().then( async _=>{
             try{

@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme: Theme): any => ({
 const TestView = ()=> {
     const classes: any = useStyles();
     const [progress, setProgress] = useState(0);
+    const [turnURL, setTurnURL] = useState('');
+    const [turnUserName, setTurnUserName] = useState('');
+    const [turnUserPassword, setTurnUserPassword] = useState('');
+
     // initially test result is false
     const [testResult, setTestResult] = useState(false);
 
@@ -54,7 +58,9 @@ const TestView = ()=> {
 
     const turnTester = new TurnTester(15000, resultCallback, progressCallback);
     const startTest = ()=> {
-        turnTester.startTest();
+        console.warn('->', turnURL, turnUserName, turnUserPassword);
+        setProgress(0);
+        turnTester.startTest(turnURL, turnUserName, turnUserPassword);
     }
 
     return (
@@ -73,6 +79,10 @@ const TestView = ()=> {
                         id="address"
                         label="Turn Server URL"
                         name="url"
+                        type="text"
+                        helperText={'i.e - "turn:server_address:port?type=udp_or_tcp"'}
+                        value={turnURL}
+                        onChange={e => setTurnURL(e.target.value) }
                         autoComplete="current-url"
                         autoFocus
                     />
@@ -84,6 +94,9 @@ const TestView = ()=> {
                         id="uname"
                         label="Turn User Name"
                         name="uname"
+                        type="text"
+                        value={turnUserName}
+                        onChange={e => setTurnUserName(e.target.value) }
                         autoComplete="current-uname"
                     />
                     <TextField
@@ -93,8 +106,10 @@ const TestView = ()=> {
                         fullWidth
                         name="password"
                         label="Turn User Password"
-                        type="password"
+                        type="text"
                         id="password"
+                        value={turnUserPassword}
+                        onChange={e => setTurnUserPassword(e.target.value) }
                         autoComplete="current-password"
                     />
                     <Button
@@ -104,7 +119,7 @@ const TestView = ()=> {
                         color="primary"
                         className={classes.submit}
                         disabled={isRunning()}
-                        onClick={startTest}
+                        onClick={() => startTest()}
                     >
                         Test server
                     </Button>

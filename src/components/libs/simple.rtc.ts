@@ -10,12 +10,18 @@ class SimpleRTC {
     public recvChannel: RTCDataChannel;
     public sendChannel: RTCDataChannel;
     constructor(id: string, rtcIceServer: RTCIceServer[], onIceCandidate: (e: RTCPeerConnectionIceEvent, id: string) => void, onIceConnectionStateChange: (e: object, id: string) => void ){
-        const iceConfig: RTCConfiguration = {
+        const rtcConfig: RTCConfiguration = {
             iceTransportPolicy: "relay",
             iceServers: rtcIceServer,
         };
+        console.warn('->', 'rtc config', rtcConfig);
         this.id = id;
-        this.pc = new RTCPeerConnection(iceConfig);
+        try{
+            this.pc = new RTCPeerConnection(rtcConfig);
+        } catch(err){
+            console.error(err);
+            throw err;
+        }
         this.pc.addEventListener('icecandidate', e => onIceCandidate(e, this.id));
         this.pc.addEventListener('iceconnectionstatechange', e => onIceConnectionStateChange(e, this.id) );
         if (id=='1') {
