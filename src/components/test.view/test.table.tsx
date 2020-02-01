@@ -6,7 +6,9 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { LinearProgress } from '@material-ui/core';
-
+import { Alert, AlertTitle } from '@material-ui/lab';
+import {useState} from 'react';
+import TurnTester from '../turn-test/turn.test';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -33,6 +35,29 @@ const useStyles = makeStyles(theme => ({
 
 const TestView = ()=> {
     const classes = useStyles();
+    const [progress, setProgress] = useState(0);
+    // initially test result is false
+    const [testResult, setTestResult] = useState(false);
+
+    const resultCallback = (error: string, success: string): void => {
+        setProgress(100);
+        setTestResult( error !== 'failed');
+    };
+    const progressCallback = (progress: number): void => {
+        console.warn('current progress', progress);
+        setProgress(progress);
+    };
+
+    const isRunning = (): boolean => {
+        return progress > 0 && progress < 100 ;
+    };
+
+
+    const turnTester = new TurnTester(15000, resultCallback, progressCallback);
+    const startTest = ()=> {
+        turnTester.startTest();
+    }
+
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -61,7 +86,6 @@ const TestView = ()=> {
                         label="Turn User Name"
                         name="uname"
                         autoComplete="current-uname"
-                        autoFocus
                     />
                     <TextField
                         variant="outlined"
@@ -80,10 +104,25 @@ const TestView = ()=> {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        disabled={isRunning()}
+                        onClick={startTest}
                     >
                         Test server
                     </Button>
-                    <LinearProgress variant="determinate" value={50} color={"primary"} className={classes.progressBar}/>
+                    <LinearProgress variant="determinate" value={progress} color={"primary"} className={classes.progressBar}/>
+                    {
+                        !isRunning() && testResult &&
+                        <Alert severity="success">
+                          <AlertTitle>Success</AlertTitle>
+                          Turn server OK!
+                        </Alert>
+                    }
+                    {
+                        !isRunning() && !testResult &&
+                        <Alert severity="error">
+                        <AlertTitle>Error</AlertTitle>
+                        Please check your turn server.
+                    </Alert>}
                 </div>
             </div>
         </Container>

@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.9.0",
+    "@material-ui/lab": "^4.0.0-alpha.40",
     "core-js": "3.6.4",
     "material-table": "^1.56.1",
     "react": "16.12.0",

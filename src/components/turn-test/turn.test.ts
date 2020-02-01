@@ -12,10 +12,11 @@ class TurnTester{
         this.testIterationCount = Math.round(testTimeoutMs / 1000);
         this.resultCallback = resultCallback;
         this.progressCallback = progressCallback;
+        this.onIceCandidate = this.onIceCandidate.bind(this);
+        this.onIceConnectionStateChange = this.onIceConnectionStateChange.bind(this);
     }
 
     private async onIceCandidate(e: RTCPeerConnectionIceEvent, id: string): Promise<void> {
-        console.warn('on ice candidate', id, e);
         if(id=='1') {
             await this.peer2?.setIceCandidate(e.candidate);
         } else{
@@ -36,16 +37,17 @@ class TurnTester{
     }
 
     private async getFeedback(): Promise<string> {
+        let totalCount = this.testIterationCount;
+        this.intervalId = setInterval(()=> {
+            totalCount -= 1;
+            const completed: number = (this.testIterationCount - totalCount);
+            this.progressCallback( Math.round((100.*completed)/(Math.max(1,this.testIterationCount))) );
+            if(totalCount < 0) {
+                document.dispatchEvent(new Event('onTestFailed'));
+            }
+        }, 1000);
+
         return new Promise((resolve, reject)=>{
-            let totalCount = this.testIterationCount;
-            this.intervalId = setInterval(()=> {
-                totalCount -= 1;
-                const completed: number = (this.testIterationCount - totalCount);
-                this.progressCallback( Math.round((100.*completed)/(Math.max(1,this.testIterationCount))) );
-                if(totalCount < 0) {
-                    document.dispatchEvent(new Event('onTestFailed'));
-                }
-            }, 1000);
             document.addEventListener('onTestSuccess', ()=> {
                 //console.warn('successfully connected to the turn server');
                 clearInterval(this.intervalId);
@@ -92,7 +94,7 @@ class TurnTester{
             }
         })
     }
-    public endTest(): void {
+    private endTest(): void {
         this.dispose().catch();
         clearInterval(this.intervalId);
     }

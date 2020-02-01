@@ -12,7 +12,7 @@ class SimpleRTC {
     private isRunning: boolean;
     constructor(id: string, onIceCandidate: (e: RTCPeerConnectionIceEvent, id: string) => void, onIceConnectionStateChange: (e: object, id: string) => void ){
         const iceConfig: RTCConfiguration = {
-            iceTransportPolicy: "all"
+            iceTransportPolicy: "relay"
         };
         this.id = id;
         this.pc = new RTCPeerConnection(iceConfig);
