@@ -9,7 +9,7 @@ import {
 
 import TestView from './components/test.view/test.table';
 
-class App extends React.Component {
+class App extends React.Component<any, any> {
     render(): JSX.Element {
       return (
         <Router>

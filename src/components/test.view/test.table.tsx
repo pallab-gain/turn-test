@@ -3,12 +3,12 @@ import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles, Theme} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import MaterialTable from 'material-table';
 import {useState} from "react";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme): any => ({
     '@global': {
         ul: {
             margin: 0,
@@ -31,17 +31,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const initialColumnData = [
-    { title: 'Name', field: 'name' },
-    { title: 'Surname', field: 'surname', initialEditValue: 'initial edit value' },
-    { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-    {
-        title: 'Birth Place',
-        field: 'birthCity',
-        lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-    }];
+    { title: 'Turn Server Address', field: 'serverAddress', type: 'string'},
+    { title: 'Turn User Name', field: 'turnUserName', type: 'string'},
+    { title: 'Turn User Password', field: 'turnUserPassword', type: 'string' },
+]
+
 const initialData= [
-    { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 }];
+    { serverAddress: 'turn:someAddress:4738', turnUserName: 'MyAwesomeUserName', turnUserPassword: 'myAwesomeTurnPassword'},];
 
 const TestView = ()=> {
     const classes = useStyles();
@@ -58,51 +54,11 @@ const TestView = ()=> {
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Container maxWidth="sm" component="main" className={classes.heroContent}>
-                <Typography variant="h6" align="center" color="textSecondary" component="p">
-                    Quickly test your turn server setup
-                </Typography>
+            <Container maxWidth="xl" component="main" className={classes.heroContent}>
                 <MaterialTable
-                    title="Editable Preview"
+                    title={'Test turn server setup'}
                     columns={columns}
                     data={data}
-                    editable={{
-                        onRowAdd: newData =>
-                            new Promise((resolve, reject) => {
-                                setTimeout(() => {
-                                    {
-                                        const data = data;
-                                        data.push(newData);
-                                        this.setState({ data }, () => resolve());
-                                    }
-                                    resolve()
-                                }, 1000)
-                            }),
-                        onRowUpdate: (newData, oldData) =>
-                            new Promise((resolve, reject) => {
-                                setTimeout(() => {
-                                    {
-                                        const data = data;
-                                        const index = data.indexOf(oldData);
-                                        data[index] = newData;
-                                        this.setState({ data }, () => resolve());
-                                    }
-                                    resolve()
-                                }, 1000)
-                            }),
-                        onRowDelete: oldData =>
-                            new Promise((resolve, reject) => {
-                                setTimeout(() => {
-                                    {
-                                        const data = data;
-                                        const index = data.indexOf(oldData);
-                                        data.splice(index, 1);
-                                        this.setState({ data }, () => resolve());
-                                    }
-                                    resolve()
-                                }, 1000)
-                            }),
-                    }}
                 />
             </Container>
         </React.Fragment>
