@@ -57,7 +57,7 @@ const TestView = ()=> {
 
 
     const turnTester = new TurnTester(15000, resultCallback, progressCallback);
-    const startTest = ()=> {
+    const startTest = (): void => {
         console.warn('->', turnURL, turnUserName, turnUserPassword);
         setProgress(0);
         turnTester.startTest(turnURL, turnUserName, turnUserPassword);
