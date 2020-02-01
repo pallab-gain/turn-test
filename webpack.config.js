@@ -21,7 +21,10 @@ module.exports = (env, argv) => {
         },
 
         devServer: {
-            contentBase: './dist'
+            contentBase: path.join(__dirname, 'dist'),
+            compress: true,
+            // eslint-disable-next-line no-undef
+            port: process.env.PORT
         },
 
         module: {
