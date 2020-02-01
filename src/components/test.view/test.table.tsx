@@ -3,14 +3,13 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
+import {makeStyles, Theme, LinearProgress, createStyles} from '@material-ui/core';
 import Container from '@material-ui/core/Container';
-import { LinearProgress } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import {useState} from 'react';
 import TurnTester from '../turn-test/turn.test';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme): any => ({
     paper: {
         marginTop: theme.spacing(8),
         display: 'flex',
@@ -34,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const TestView = ()=> {
-    const classes = useStyles();
+    const classes: any = useStyles();
     const [progress, setProgress] = useState(0);
     // initially test result is false
     const [testResult, setTestResult] = useState(false);

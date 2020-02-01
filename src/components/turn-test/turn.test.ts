@@ -7,6 +7,7 @@ class TurnTester{
     private readonly resultCallback: (error: string, success: string) => void;
     private readonly progressCallback: (progress: number) => void;
     private readonly testIterationCount: number;
+
     constructor(testTimeoutMs = 30000, resultCallback: (error: string, success: string) => void,
                 progressCallback: (progress: number) => void) {
         this.testIterationCount = Math.round(testTimeoutMs / 1000);
@@ -53,7 +54,7 @@ class TurnTester{
                 clearInterval(this.intervalId);
                 resolve('success')
             });
-            document.addEventListener('onTestSuccess', ()=> {
+            document.addEventListener('onTestFailed', ()=> {
                 //console.warn('failed to connect to the turn server');
                 clearInterval(this.intervalId);
                 reject('failed');
@@ -94,6 +95,7 @@ class TurnTester{
             }
         })
     }
+
     private endTest(): void {
         this.dispose().catch();
         clearInterval(this.intervalId);
