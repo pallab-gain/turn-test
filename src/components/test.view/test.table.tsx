@@ -1,67 +1,92 @@
 import * as React from 'react';
-import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles, Theme} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import MaterialTable from 'material-table';
-import {useState} from "react";
+import { LinearProgress } from '@material-ui/core';
 
-const useStyles = makeStyles((theme: Theme): any => ({
-    '@global': {
-        ul: {
-            margin: 0,
-            padding: 0,
-            listStyle: 'none',
-        },
+
+const useStyles = makeStyles(theme => ({
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
-    appBar: {
-        borderBottom: `1px solid ${theme.palette.divider}`,
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
     },
-    toolbar: {
-        flexWrap: 'wrap',
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
     },
-    toolbarTitle: {
-        flexGrow: 1,
+    submit: {
+        margin: theme.spacing(3, 0, 2),
     },
-    heroContent: {
-        padding: theme.spacing(2, 0, 1),
+    progressBar: {
+        margin: theme.spacing(5, 0, 2),
     },
 }));
 
-const initialColumnData = [
-    { title: 'Turn Server Address', field: 'serverAddress', type: 'string'},
-    { title: 'Turn User Name', field: 'turnUserName', type: 'string'},
-    { title: 'Turn User Password', field: 'turnUserPassword', type: 'string' },
-]
-
-const initialData= [
-    { serverAddress: 'turn:someAddress:4738', turnUserName: 'MyAwesomeUserName', turnUserPassword: 'myAwesomeTurnPassword'},];
-
 const TestView = ()=> {
     const classes = useStyles();
-    const [columns, setColumns] = useState(initialColumnData);
-    const [data, setData] = useState(initialData);
-
     return (
-        <React.Fragment>
+        <Container component="main" maxWidth="xs">
             <CssBaseline />
-            <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
-                <Toolbar className={classes.toolbar}>
-                    <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
-                        Turn Tester
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <Container maxWidth="xl" component="main" className={classes.heroContent}>
-                <MaterialTable
-                    title={'Test turn server setup'}
-                    columns={columns}
-                    data={data}
-                />
-            </Container>
-        </React.Fragment>
+            <div className={classes.paper}>
+                <Typography component="h1" variant="h5">
+                    Test Turn Server
+                </Typography>
+                <div className={classes.form}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="address"
+                        label="Turn Server URL"
+                        name="url"
+                        autoComplete="current-url"
+                        autoFocus
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="uname"
+                        label="Turn User Name"
+                        name="uname"
+                        autoComplete="current-uname"
+                        autoFocus
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Turn User Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Test server
+                    </Button>
+                    <LinearProgress variant="determinate" value={50} color={"primary"} className={classes.progressBar}/>
+                </div>
+            </div>
+        </Container>
     );
 }
 
