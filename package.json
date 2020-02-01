@@ -8,7 +8,6 @@
     "build-prod": "webpack --mode=production",
     "start": "webpack-dev-server --hot --host 0.0.0.0",
     "test": "",
-
     "lint": "npx eslint --ext .ts,tsx ."
   },
   "keywords": [],
